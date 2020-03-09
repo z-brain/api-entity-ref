@@ -33,20 +33,24 @@ export abstract class AccountBaseDto implements Omit<Account, 'id'> {
 
 `dtos/account-create.dto.ts`
 ```typescript
-import { ApiEntityRef } from '@z-brain/api-entity-ref';
+import { ApiEntityRef, ApiPropertyRef } from '@z-brain/api-entity-ref';
 import { EEntityValidationGroup } from '@lib/common/enums';
 import { Account } from '../types';
 import { AccountBaseDto } from './account-base.dto';
 
 @ApiEntityRef(Account, { groups: [EEntityValidationGroup.Create] })
 export class AccountCreateDto extends AccountBaseDto {
+
+  @ApiPropertyRef()
+  public lastName?: string;
+
 }
 ```
 
 `dtos/account-update.dto.ts`
 ```typescript
 import { Allow, IsNotEmpty } from 'class-validator';
-import { ApiEntityRef, ApiPropertyRef } from '@z-brain/api-entity-ref';
+import { ApiEntityRef } from '@z-brain/api-entity-ref';
 
 import { IDInt } from '@lib/common/types';
 import { EEntityValidationGroup } from '@lib/common/enums';
@@ -60,9 +64,6 @@ export class AccountUpdateDto extends AccountBaseDto implements Omit<Account, 'f
   @Allow()
   @IsNotEmpty()
   public id!: IDInt;
-
-  @ApiPropertyRef()
-  public lastName?: string;
 
 }
 ```
