@@ -7,7 +7,7 @@
     "incremental": true,
     "lib": [
       "dom",
-      "es2019"
+      "es2020"
     ],
     "module": "commonjs",
     "moduleResolution": "node",
@@ -21,6 +21,7 @@
     ],
     "types": [
       "jest",
+      "node",
       "jest-extended"
     ],
     "outDir": "./dist",
