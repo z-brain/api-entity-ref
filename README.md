@@ -1,57 +1,151 @@
-# Modern Wallaby JS Starter (TypeScript + Babel + Jest)
+# Z-Brain Api Entity Ref
+
+Decorators to copy swagger & class-validator metadata from one class to another
 
 *Notice: If you have any propositions feel free to make an issue or create a pull request.*
 
-## Features
+## How to use
 
-* Wallaby JS works out of the box without any additional config  
-  Notice: How to run in "Without Configuration" mode ([Official Wallaby JS Guide](https://wallabyjs.com/docs/intro/config.html#automatic-configuration))
-* [ESLint](https://eslint.org) for linting JS & TS files ([TSLint is deprecated in 2019](https://github.com/palantir/tslint#tslint)). Basic rules configured.
-* Very strict linting [config](/src/.eslintrc.js) ([airbnb](https://www.npmjs.com/package/eslint-config-airbnb-base) + [unicorn](https://www.npmjs.com/package/eslint-plugin-unicorn) + [some other plugins](/src/.eslintrc.js#L11))
-* Unit Testing via [Jest](https://jestjs.io/) 24+
-* Additional Jest matchers from [`jest-extended`](https://github.com/jest-community/jest-extended) configured
-* [TypeScript](http://typescriptlang.org/) 3.7+ via [Babel](https://babeljs.io/docs/en/babel-preset-typescript)
-* Yarn for packages installation and [`check-yarn`](/tools/check-yarn.js) utility to prevent packages installation via `npm`
-* [`.nvmrc`](https://github.com/nvm-sh/nvm#nvmrc)
-* Nothing platform related. This repository template can be used for NodeJS and for Browser development.
-* Git hooks via [husky](https://www.npmjs.com/package/husky)
-* [Utility](/tools/merge-with-repository-template.sh) to automatically pull updates from this template repository (`npm run tpl-repo:merge`)
+### Installing
 
-## Ways to use
+`yarn add @z-brain/api-entity-ref`  
+or  
+`npm i -s @z-brain/api-entity-ref`
 
-1. Clone as is
+### Usage example
 
-    1. `git clone git@github.com:korniychuk/wallaby-ts-starter.git`
-    2. `cd wallaby-ts-starter`
-    3. `yarn`
-2. Fork
+`dtos/account-base.dto.ts`
+```typescript
+import { ApiPropertyRef } from '@z-brain/api-entity-ref';
+import { Account } from '../types';
 
-    0. Click **Fork** git button
-    1. `git clone git@github.com:YOUR_GIT_NAME/wallaby-ts-starter.git`
-    2. `cd wallaby-ts-starter`
-    3. `yarn`
-3. Creating from template
+export abstract class AccountBaseDto implements Omit<Account, 'id'> {
 
-    0. Click **Fork** git button
-    1. Create new repository and specify template ![template](./resources/readme.git-create-from-template.png)
-    1. `git clone git@github.com:YOUR_GIT_NAME/NEW_REPOSITORY_NAME.git`
-    2. `cd NEW_REPOSITORY_NAME`
-    3. `yarn`
-4. Using with already cloned repository as an additional origin for pulling updates
+  @ApiPropertyRef()
+  public email!: string;
 
-    1. Automatically
-    
-       ```bash
-       npm run merge-tpl-repo
-       ```
-    
-    2. Manually
+  @ApiPropertyRef()
+  public firstName?: string;
 
-        1. `git remote add template git@github.com:korniychuk/wallaby-ts-starter.git`
-        2. `git fetch template`
-        3. `git merge --allow-unrelated-histories template/master`
+}
+```
 
-## How to
+`dtos/account-create.dto.ts`
+```typescript
+import { ApiEntityRef } from '@z-brain/api-entity-ref';
+import { EEntityValidationGroup } from '@lib/common/enums';
+import { Account } from '../types';
+import { AccountBaseDto } from './account-base.dto';
+
+@ApiEntityRef(Account, { groups: [EEntityValidationGroup.Create] })
+export class AccountCreateDto extends AccountBaseDto {
+}
+```
+
+`dtos/account-update.dto.ts`
+```typescript
+import { Allow, IsNotEmpty } from 'class-validator';
+import { ApiEntityRef, ApiPropertyRef } from '@z-brain/api-entity-ref';
+
+import { IDInt } from '@lib/common/types';
+import { EEntityValidationGroup } from '@lib/common/enums';
+
+import { Account } from '../types';
+import { AccountBaseDto } from './account-base.dto';
+
+@ApiEntityRef(Account, { groups: [EEntityValidationGroup.Update] })
+export class AccountUpdateDto extends AccountBaseDto implements Omit<Account, 'fullName'> {
+
+  @Allow()
+  @IsNotEmpty()
+  public id!: IDInt;
+
+  @ApiPropertyRef()
+  public lastName?: string;
+
+}
+```
+
+`types/account.entity.ts`
+```typescript
+import { ApiProperty, ApiPropertyOptional, ApiResponseProperty } from '@nestjs/swagger';
+import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
+
+import { IDInt } from '@lib/common/types';
+import {
+  DEFAULT_EMAIL_MAX_LEN,
+  DEFAULT_EMAIL_MIN_LEN,
+  DEFAULT_NAME_MAX_LEN,
+  DEFAULT_NAME_MIN_LEN,
+} from '@lib/common/db.constants';
+import { IsUnique } from '@lib/common/validators';
+import { EEntityValidationGroup } from '@lib/common/enums';
+
+@Entity()
+export class Account {
+  public static readonly NAMELESS_FULL_NAME: string = 'Nameless User';
+
+  @ApiResponseProperty({ example: 1234 })
+  @PrimaryGeneratedColumn('increment', { unsigned: true })
+  public id!: IDInt;
+
+  @ApiProperty({
+    example: 'ivan@gmail.com',
+    maxLength: DEFAULT_NAME_MAX_LEN,
+    minLength: DEFAULT_NAME_MIN_LEN,
+    uniqueItems: true,
+  })
+  @Column({ length: DEFAULT_EMAIL_MAX_LEN, unique: true })
+  @IsOptional({ groups: [EEntityValidationGroup.Update] })
+  @IsEmail(undefined, { always: true })
+  @IsUnique(Account, undefined, { always: true })
+  @Length(DEFAULT_EMAIL_MIN_LEN, DEFAULT_EMAIL_MAX_LEN, { always: true })
+  public email!: string;
+
+  @ApiPropertyOptional({
+    example: 'Ivan',
+    maxLength: DEFAULT_NAME_MAX_LEN,
+    minLength: DEFAULT_NAME_MIN_LEN,
+  })
+  @IsOptional({ always: true })
+  @IsString({ always: true })
+  @Length(DEFAULT_NAME_MIN_LEN, DEFAULT_NAME_MAX_LEN, { always: true })
+  @Column({ length: DEFAULT_NAME_MAX_LEN, nullable: true })
+  public firstName?: string;
+
+  @ApiPropertyOptional({
+    example: 'Trump',
+    maxLength: DEFAULT_NAME_MAX_LEN,
+    minLength: DEFAULT_NAME_MIN_LEN,
+  })
+  @IsOptional({ always: true })
+  @IsString({ always: true })
+  @Length(DEFAULT_NAME_MIN_LEN, DEFAULT_NAME_MAX_LEN, { always: true })
+  @Column({ length: DEFAULT_NAME_MAX_LEN, nullable: true })
+  public lastName?: string;
+
+  @ApiResponseProperty({
+    example: 'Ivan Trump',
+  })
+  public get fullName(): string {
+    return this.firstName && this.lastName
+           ? `${ this.firstName } ${ this.lastName }`
+           : this.firstName || this.lastName || (this.constructor as typeof Account).NAMELESS_FULL_NAME;
+  }
+
+}
+```
+
+## Development notes
+
+### Quick Start
+
+```bash
+cd /code/z-brain
+git clone git@github.com:z-brain/api-entity-ref.git
+cd api-entity-ref
+yarn install
+```
 
 ### How to use NodeJS version from the `.nvmrc`
 
@@ -81,6 +175,21 @@
 
   `npm run test -- src/my.spec.ts`  
   `npm run test:watch -- src/my.spec.ts`
+
+### How to build and publish NPM package
+
+*NPM Token:* `367a...ce73`
+
+CI configuration details here: [.github/workflows/npmpublish.yml](.github/workflows/npmpublish.yml)
+
+```bash
+npm run pre-push
+&& npm version patch -m 'Update package version version to %s'
+&& npm run gen-public-package.json
+&& cp README.md dist/
+&& npm publish dist --access public
+&& git push --no-verify && git push --tags --no-verify
+```
 
 ## Author
 
