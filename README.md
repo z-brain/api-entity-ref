@@ -1,4 +1,5 @@
 # Z-Brain Api Entity Ref
+![NPM Package](https://github.com/z-brain/api-entity-ref/workflows/NPM%20Package/badge.svg)
 
 Decorators to copy swagger & class-validator metadata from one class to another
 
