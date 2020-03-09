@@ -1,6 +1,6 @@
 # Z-Brain Api Entity Ref
 
-<p align="center">
+<p>
   <a target="_blank" href="https://github.com/z-brain/api-entity-ref/actions?query=workflow%3A%22Build%22">
     <img alt="Build status" src="https://github.com/z-brain/api-entity-ref/workflows/Build/badge.svg">
   </a>
