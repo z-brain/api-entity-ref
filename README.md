@@ -1,8 +1,16 @@
 # Z-Brain Api Entity Ref
 
-[![Build](https://github.com/z-brain/api-entity-ref/workflows/Build/badge.svg)](https://github.com/z-brain/api-entity-ref/actions?query=workflow%3A%22Build%22)
-[![npm version](https://img.shields.io/npm/v/@z-brain/api-entity-ref.svg)](https://www.npmjs.com/package/@z-brain/api-entity-ref)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+<p align="center">
+  <a target="_blank" href="https://github.com/z-brain/api-entity-ref/actions?query=workflow%3A%22Build%22">
+    <img alt="Build status" src="https://github.com/z-brain/api-entity-ref/workflows/Build/badge.svg">
+  </a>
+  <a target="_blank" href="https://www.npmjs.com/package/@z-brain/api-entity-ref">
+    <img alt="NPM version" src="https://img.shields.io/npm/v/@z-brain/api-entity-ref.svg">
+  </a>
+  <a target="_blank" href="https://www.gnu.org/licenses/gpl-3.0">
+    <img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg">
+  </a>
+</p>
 
 Decorators to copy swagger & class-validator metadata from one class to another
 
