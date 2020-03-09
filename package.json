@@ -4,7 +4,7 @@
   "author": "Anton Korniychuk <dev@korniychuk.pro>",
   "license": "GPL-3.0",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "bugs": {
     "url": "https://github.com/z-brain/api-entity-ref/issues"
   },
@@ -61,7 +61,6 @@
     "jest": "~25.1.0",
     "jest-extended": "~0.11.5",
     "rimraf": "~3.0.0",
-
     "@nestjs/common": "~6.11.11",
     "@nestjs/core": "~6.11.11",
     "@nestjs/swagger": "~4.3.2",
