@@ -153,7 +153,7 @@ export class ApiPropertyRefDecorator {
     if (targetValidators) {
       targetValidators.forEach((validator) => {
         const groupsDiff = _.difference(validator.groups, groups);
-        const hasGroupsDiff = _.isEmpty(groupsDiff);
+        const hasNoGroupsDiff = _.isEmpty(groupsDiff);
 
         const updatedValidator = new ValidationMetadata({
           ...validator,
@@ -161,8 +161,8 @@ export class ApiPropertyRefDecorator {
           target: realTarget,
           validationOptions: {
             ...(validator.validationTypeOptions || {}),
-            always: hasGroupsDiff ? undefined : validator.validationTypeOptions?.always ?? undefined,
-            groups: hasGroupsDiff ? undefined : groupsDiff,
+            always: hasNoGroupsDiff ? undefined : validator.validationTypeOptions?.always ?? undefined,
+            groups: hasNoGroupsDiff ? undefined : groupsDiff,
           },
         });
         this.classValidatorStorage.addValidationMetadata(updatedValidator);
