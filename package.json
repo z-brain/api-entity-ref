@@ -23,14 +23,14 @@
     "build:prod": "yarn run build",
     "build:local": "yarn run build && yarn run gen-public-package.json && cp README.md dist/ && tools/install-me-from.sh",
     "lint": "eslint --ext .js,.ts src/**",
-    "lint:fix": "yarn run lint -- --fix",
+    "lint:fix": "yarn run lint --fix",
     "pre-push": "yarn run lint && yarn run build:prod && yarn run tpl-repo:check",
     "preinstall": "node ./tools/check-yarn.js",
     "test": "jest -c jest.config.js",
-    "test:watch": "yarn run test -- --watch",
+    "test:watch": "yarn run test --watch",
     "tpl-repo": "tools/merge-with-repository-template.sh",
-    "tpl-repo:check": "yarn run tpl-repo -- check",
-    "tpl-repo:merge": "yarn run tpl-repo -- merge",
+    "tpl-repo:check": "yarn run tpl-repo check",
+    "tpl-repo:merge": "yarn run tpl-repo merge",
     "gen-public-package.json": "tools/gen-public-package.js"
   },
   "dependencies": {
