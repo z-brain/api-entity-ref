@@ -204,6 +204,11 @@ npm run pre-push
 && git push --no-verify && git push --tags --no-verify
 ```
 
+### How to build package to local installation
+
+1. `yarn run build:local`
+2. Then you can install a local package build from path `file:.../api-entity-ref/dist`.
+
 ## Author
 
 | [<img src="https://www.korniychuk.pro/avatar.jpg" width="100px;"/><br /><sub>Anton Korniychuk</sub>](https://korniychuk.pro) |

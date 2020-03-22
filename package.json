@@ -21,6 +21,7 @@
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "build:prod": "yarn run build",
+    "build:local": "yarn run build && yarn run gen-public-package.json && cp README.md dist/ && tools/install-me-from.sh",
     "lint": "eslint --ext .js,.ts src/**",
     "lint:fix": "yarn run lint -- --fix",
     "pre-push": "yarn run lint && yarn run build:prod && yarn run tpl-repo:check",
