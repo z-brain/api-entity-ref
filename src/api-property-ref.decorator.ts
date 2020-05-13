@@ -3,7 +3,7 @@ import { DECORATORS } from '@nestjs/swagger/dist/constants';
 import { ApiPropertyOptions } from '@nestjs/swagger';
 import { createApiPropertyDecorator } from '@nestjs/swagger/dist/decorators/api-property.decorator';
 import { getFromContainer, MetadataStorage } from 'class-validator';
-import { ValidationMetadata } from 'class-validator/metadata/ValidationMetadata';
+import { ValidationMetadata } from 'class-validator/types/metadata/ValidationMetadata';
 
 import { Type, isSymbol } from './utils';
 
