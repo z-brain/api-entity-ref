@@ -161,7 +161,7 @@ export class ApiPropertyRefDecorator {
           target: realTarget,
           validationOptions: {
             ...(validator.validationTypeOptions || {}),
-            always: hasNoGroupsDiff ? undefined : validator.validationTypeOptions?.always ?? undefined,
+            always: hasNoGroupsDiff ? true      : validator.validationTypeOptions?.always ?? undefined,
             groups: hasNoGroupsDiff ? undefined : groupsDiff,
           },
         });
